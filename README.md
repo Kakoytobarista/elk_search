@@ -19,6 +19,13 @@ http://localhost:8000/docs
 ```
 PS:
 I've pre-populated elk with data so you can search by these words:
+```text
+    We are searching text hello
+    We are searching text bye
+    We are searching text hi
+    We are searching text hey
+    We are searching text bye bye
+```
 
 ENDPOINT FOR CREATING RECORD:
 ```

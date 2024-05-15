@@ -1,0 +1,3 @@
+elk:
+  index_name: simple_index
+  hosts: http://elasticsearch:9200

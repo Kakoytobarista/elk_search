@@ -1,0 +1,3 @@
+elk:
+  index_name: test_index
+  hosts: http://localhost:9200

@@ -1,0 +1,32 @@
+Coding challenge Python/Search Engineer
+
+This is the small project we'd like you to complete. You can send us the result either over email or via Github (or similar tools).
+ 
+Task: Create a HTTP REST service that is able to store, retrieve and search
+natural language documents. Search API should support a free text search
+parameter, where a user is able to retrieve documents matching their query,
+similar to what google search does.
+Bonus task would be to use a LLM to directly generate the answer to the user query, instead of returning the matching results list.
+ 
+An example request for the service would be. Below is just a very simple example but use the REST best practices. E.g. --> Data can be sent in via request body also.:
+ 
+  POST / HTTP/1.1
+  Accept: application/json
+  Content-Type: application/x-www-form-urlencoded
+ 
+  text=This+is+a+long+text
+ 
+This endpoint should return a document_id which can be used later to retrieve
+the document again.
+ 
+A second endpoint should return the search result list where the top K documents
+matching the results are returned in a sorted order (with a sorting criteria of
+your choosing). We leave the specification of this API endpoint for you to decide.
+ 
+You can choose the web-framework of your choice in python for this task. We recommend fastAPI, Flask.
+For powering the search experience, we recommend to use Elasticsearch
+or any other similar tool of your liking.
+ 
+Please provide instructions on how to start and use your web application.
+ 
+Please make sure to include some code or thoughts on testing of this code.

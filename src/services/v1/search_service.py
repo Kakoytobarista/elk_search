@@ -1,3 +1,4 @@
+import logging
 from typing import Union
 from uuid import uuid4
 
@@ -6,6 +7,9 @@ from exceptions import QueryNotFoundException
 from schemas.v1.search_schema import StoreDocumentResponse, Document, SearchDocumentsResponse, SearchResult
 
 from config.elk.elk_helper import create_es_client
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 
 class SearchService:
@@ -16,6 +20,7 @@ class SearchService:
         async with self.es_generator() as es:
             document_id = str(uuid4())
             await es.index(index=app_config.elk.index_name, id=document_id, body={"text": data.text})
+            logger.info(f"Successfully stored document with text: {data.text}")
             return StoreDocumentResponse(document_id=document_id)
 
     async def search_documents(self, query: str) -> SearchDocumentsResponse:
@@ -32,6 +37,7 @@ class SearchService:
                 SearchResult(document_id=hit["_id"], text=hit["_source"]["text"])
                 for hit in hits
             ]
+            logger.info(f"Got {len(results)}")
             sorted_results = sorted(results, key=lambda x: len(x.text), reverse=True)
             return SearchDocumentsResponse(results=sorted_results)
 

@@ -1,12 +1,12 @@
 # FastAPI API Service with Elasticsearch Integration
 
 ## Setup Instructions:
-1. Install Docker and Docker Compose on your system if not already installed.
-2. Clone this repository to your local machine
+1. Install Docker/Docker Compose, python3 on your system if not already installed.
+2. Clone this repository.
 ```
 https://github.com/Kakoytobarista/elk_search
 ```
-3. Navigate to the infra dir from the root dir.
+3. Navigate to the infra dir from the root dir (ROOT DIR: elk_search)
 ```
 cd infra
 ```
@@ -17,6 +17,9 @@ cd infra
 ```
 http://localhost:8000/docs
 ```
+PS:
+I've pre-populated elk with data so you can search by these words:
+
 ENDPOINT FOR CREATING RECORD:
 ```
 http://localhost:8000/docs#/search/store_document_search__post
@@ -29,8 +32,12 @@ _____
 
 ## Running Tests:
 
-1. To run tests for the project, navigate to the root directory of the project in your terminal.
-2. Execute the following command to set the Python path (You have to do it from the root dir):
+1. To run tests for the project, navigate to the src dir and run commands (if you dont have poetry, install it)
+```
+poetry shell
+poetry install
+```
+2. Navigate to root dir and execute the following command to set the Python path:
 ```shell
 export PYTHONPATH=$(realpath "src")
 ```

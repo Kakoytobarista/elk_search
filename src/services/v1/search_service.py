@@ -1,7 +1,9 @@
+import asyncio
 import logging
-from typing import Union
+from typing import Union, List
 from uuid import uuid4
 
+from ai import LLMManager
 from config.project_config import app_config
 from exceptions import QueryNotFoundException
 from schemas.v1.search_schema import StoreDocumentResponse, Document, SearchDocumentsResponse, SearchResult
@@ -23,7 +25,7 @@ class SearchService:
             logger.info(f"Successfully stored document with text: {data.text}")
             return StoreDocumentResponse(document_id=document_id)
 
-    async def search_documents(self, query: str) -> SearchDocumentsResponse:
+    async def _get_documents(self, query: str) -> List[SearchResult]:
         if not query:
             raise QueryNotFoundException("Query not provided")
 
@@ -38,8 +40,20 @@ class SearchService:
                 for hit in hits
             ]
             logger.info(f"Got {len(results)}")
-            sorted_results = sorted(results, key=lambda x: len(x.text), reverse=True)
-            return SearchDocumentsResponse(results=sorted_results)
+            logger.info(results)
+
+            return results
+
+    async def search_documents(self, query: str) -> SearchDocumentsResponse:
+        results = await self._get_documents(query=query)
+        if not results:
+            generated_text = LLMManager().generate(prompt=query)
+            await self.store_document(Document(text=generated_text))
+            await asyncio.sleep(1)
+            results = await self._get_documents(query=query)
+
+        sorted_results = sorted(results, key=lambda x: len(x.text), reverse=True)
+        return SearchDocumentsResponse(results=sorted_results)
 
 
 search_service = SearchService(es_generator=create_es_client)

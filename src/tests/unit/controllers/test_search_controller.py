@@ -32,6 +32,7 @@ class TestSearchControllers:
     @pytest.mark.parametrize(
         'text, expected_status_code', [
             (Faker().text(max_nb_chars=10), HTTPStatus.OK),
+            ("1", HTTPStatus.OK),
             ("", HTTPStatus.BAD_REQUEST),
         ]
     )
@@ -42,3 +43,10 @@ class TestSearchControllers:
         assert response.status_code == expected_status_code
         if text:
             assert response.json().get("results")[0].get("text") == text
+
+    @pytest.mark.asyncio
+    async def test_search_not_exists_documents(self):
+        text = Faker().name()
+        response = client.get(f"/search/?query={text}")
+        assert response.status_code == HTTPStatus.OK
+        assert text in response.json().get("results")[0].get("text")

@@ -15,6 +15,7 @@ aiohttp = "^3.9.5"
 faker = "^25.2.0"
 pytest = "^8.2.0"
 pytest-asyncio = "^0.23.6"
+langchain = "^0.1.20"
 
 
 [build-system]

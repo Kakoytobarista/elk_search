@@ -3,6 +3,7 @@ import asyncio
 import pytest
 from faker import Faker
 
+from exceptions import QueryNotFoundException
 from schemas.v1.search_schema import Document, StoreDocumentResponse, SearchDocumentsResponse
 from services.v1.search_service import search_service
 
@@ -24,9 +25,21 @@ class TestSearchService:
         assert data.document_id
 
     @pytest.mark.asyncio
-    async def test_search_documents(self, monkeypatch):
+    async def test_search_documents(self):
         text = Faker().text(max_nb_chars=5)
         await self.create_record(text)
         result = await search_service.search_documents(query=text)
         assert isinstance(result, SearchDocumentsResponse)
         assert result
+
+    @pytest.mark.asyncio
+    async def test_un_exists_search_documents(self):
+        text = Faker().name()
+        result = await search_service.search_documents(query=text)
+        assert isinstance(result, SearchDocumentsResponse)
+        assert result
+
+    @pytest.mark.asyncio
+    async def test_search_documents_without_query(self):
+        with pytest.raises(QueryNotFoundException):
+            await search_service.search_documents(query="")
